@@ -1,5 +1,6 @@
 import numpy as np
 from . import utils
+from .exceptions import InvalidActionError, EpisodeDoneError
 
 class Env(object):
     """
@@ -74,10 +75,3 @@ class MDP(Env):
             self.done = True
 
         return self.current_state, reward, self.done, {'gamma':self.gamma}
-
-class EpisodeDoneError(TimeoutError):
-    """An error for when the episode is over."""
-    pass
-class InvalidActionError(ValueError):
-    """An error for when an invalid action is taken"""
-    pass

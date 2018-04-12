@@ -1,8 +1,7 @@
 import numpy as np
 from ..common import MDP
+from ..actions import LEFT, RIGHT
 
-LEFT = 0
-RIGHT = 1
 N_ACTIONS = 2
 
 def build_chain_MDP(n_states=3,
