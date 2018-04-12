@@ -67,13 +67,13 @@ class MDP(Env):
         # observe the reward
         reward = self.R[current_state_idx, action]
 
-        self.current_state = utils.convert_int_rep_to_onehot(sampled_next_state)
+        self.current_state = utils.convert_int_rep_to_onehot(sampled_next_state, self.state_space)
 
 
         if sampled_next_state in self.terminal_states:
             self.done = True
 
-        return self.current_state, reward, self.done, {}
+        return self.current_state, reward, self.done, {'gamma':self.gamma}
 
 class EpisodeDoneError(TimeoutError):
     """An error for when the episode is over."""
