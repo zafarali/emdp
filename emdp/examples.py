@@ -1,7 +1,8 @@
 import numpy as np
-from ..actions import LEFT, RIGHT, UP, DOWN
-from .helper_utilities import build_simple_grid
-from .env import GridWorldMDP
+from emdp.actions import LEFT, RIGHT, UP, DOWN
+from emdp.gridworld.helper_utilities import build_simple_grid
+from emdp.gridworld.env import GridWorldMDP
+from emdp.common import MDP
 
 def build_SB_example35():
     """
@@ -43,4 +44,35 @@ def build_SB_example41():
     Example 4.1 from (Sutton and Barto, 2018)  pg (Jan 2018 version).
     """
     pass
+
+
+def build_twostate_MDP():
+    """
+    MDP with transition probabilities
+    P(s_0 | s_0, a_0) = 0.5
+    P(s_1 | s_0, a_0) = 0.5
+    P(s_0 | s_0, a_1) = 0
+    P(s_1 | s_0, a_1) = 1
+    P(s_1 | s_0, a_2) = 0
+    P(s_1 | s_1, a_2) = 1
+    Rewards: r(s_0, a_0) = 5, r(s_0, a_1) = 10, r(s_1, a_2) = -1
+    Discount factor : 0.95
+    :return:
+    """
+    P = np.zeros((2, 3, 2))
+    P[0, 0] = [0.5, 0.5]
+    P[0, 1] = [0, 1]
+    P[0, 2] = [1, 0]  # no op
+    P[1, 2] = [0, 1]
+    P[1, 1] = [0, 1]
+    P[1, 0] = [0, 1]
+    T = {0: {0: [0.5, 0.5], 1: [0, 1]}, 1: {2: [0, 1]}}
+    gamma = 0.9
+    R = np.zeros((2, 3))
+    R[0, 0] = 5
+    R[0, 1] = 10
+    R[1, 2] = -1
+
+    return MDP(P, R, gamma, p0=np.array([0.5, 0.5]), terminal_states=[])
+
 

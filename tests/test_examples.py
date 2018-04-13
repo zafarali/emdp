@@ -1,4 +1,4 @@
-from emdp.gridworld.examples import build_SB_example35
+from emdp.examples import build_SB_example35
 from emdp import actions
 
 def test_SB_example35():

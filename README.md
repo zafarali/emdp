@@ -43,7 +43,7 @@ Builds a simple 5x5 grid world where there is a terminal state at (0, 4). The pr
 For a full example, see how to build this example from the S&B book:
 
 ```python
-import emdp.gridworld import gw
+import emdp.gridworld as gw
 
 def build_SB_example35():
     """
