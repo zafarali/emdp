@@ -26,6 +26,7 @@ def build_SB_example35():
     P[3, :, :] = 0  # first set the probability of all actions from state 3 to zero
     P[3, :, 13] = 1  # now set the probability of going from 3 to 13 with prob 1 for all actions
 
+    # TODO: add rewards for walking off the grid
     R = np.zeros((P.shape[0], P.shape[1])) # initialize a matrix of size |S|x|A|
     R[1, :] = +10
     R[3, :] = +1
