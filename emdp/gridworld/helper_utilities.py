@@ -3,7 +3,26 @@ from ..actions import LEFT, RIGHT, UP, DOWN
 from ..exceptions import InvalidActionError
 n_actions = 4
 
-
+def get_state_after_executing_action(action, state, grid_size):
+    """
+    Gets the state after executing an action
+    :param action:
+    :param state:
+    :param grid_size:
+    :return:
+    """
+    if check_can_take_action(action, state, grid_size):
+        if action == LEFT:
+            return state-1
+        elif action == RIGHT:
+            return state+1
+        elif action == UP:
+            return state - grid_size
+        elif action == DOWN:
+            return state + grid_size
+    else:
+        # cant execute action, stay in the same place.
+        return state
 
 def check_can_take_action(action, state, grid_size):
     """
@@ -101,12 +120,20 @@ def build_simple_grid(size=5, terminal_states=[], p_success=1):
         elif action in [LEFT, RIGHT, UP, DOWN]:
             # valid action, now see if we can actually execute this action
             # in this state:
+
             if check_can_take_action(action, state_idx, size):
                 # yes we can
-                pass
+                possible_actions = get_possible_actions(state_idx, size)
+                if action in possible_actions:
+                    transition_probs[get_state_after_executing_action(action, state_idx, size)] = p_success
+                    possible_actions.remove(action)
+                for other_action in possible_actions:
+                    transition_probs[get_state_after_executing_action(other_action, state_idx, size)] = p_fail/len(possible_actions)
+
             else:
-                # no we cant.
-                pass
+                possible_actions = get_possible_actions(state_idx, size)
+                for other_action in possible_actions:
+                    transition_probs[get_state_after_executing_action(other_action, state_idx, size)] = (p_success+p_fail)/len(possible_actions)
         else:
             raise InvalidActionError('Invalid action {} in the 2D gridworld'.format(action))
         return transition_probs
