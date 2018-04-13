@@ -6,6 +6,7 @@ import random
 from ..common import MDP
 from ..exceptions import EpisodeDoneError, InvalidActionError
 from ..actions import LEFT, RIGHT, UP, DOWN
+from .helper_utilities import flatten_state, unflatten_state
 
 class GridWorldMDP(MDP):
     def __init__(self, P, R, gamma, p0, terminal_states, size, seed=1337, skip_check=False):
@@ -31,19 +32,11 @@ class GridWorldMDP(MDP):
 
     def flatten_state(self, state):
         """Flatten state (x,y) into a one hot vector"""
-        idx = self.size * state[0] + state[1]
-        one_hot = np.zeros(self.state_space)
-        one_hot[idx] = 1
-        return one_hot
+        return flatten_state(state, self.size, self.state_space)
 
     def unflatten_state(self, onehot):
         """Unflatten a one hot vector into a (x,y) pair"""
-        if self.has_absorbing_state:
-            onehot = onehot[:-1]
-        onehot = onehot.reshape(self.size, self.size)
-        x = onehot.argmax(0).max()
-        y = onehot.argmax(1).max()
-        return (x, y)
+        return unflatten_state(onehot, self.size, self.has_absorbing_state)
 
     def step(self, action):
         state, reward, done, info = super().step(action)
