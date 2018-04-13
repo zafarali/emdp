@@ -17,7 +17,7 @@ class GridWorldMDP(MDP):
         :param R: Transition matrix |S| x |A|
         :param gamma: discount factor
         :param p0: initial starting distribution
-        :param terminal_states: the terminal states
+        :param terminal_states: the terminal states (a list of ints, make sure to convert tuples to ints!)
         :param size: the size of the grid world (i.e there are size x size (+ 1)= |S| states)
         :param seed:
         :param skip_check:
