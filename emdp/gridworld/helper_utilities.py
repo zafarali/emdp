@@ -120,7 +120,7 @@ def build_simple_grid(size=5, terminal_states=[], p_success=1):
         elif action in [LEFT, RIGHT, UP, DOWN]:
             # valid action, now see if we can actually execute this action
             # in this state:
-
+            # TODO: distinguish between capability of slipping and taking wrong action vs failing to execute action.
             if check_can_take_action(action, state_idx, size):
                 # yes we can
                 possible_actions = get_possible_actions(state_idx, size)
@@ -132,8 +132,10 @@ def build_simple_grid(size=5, terminal_states=[], p_success=1):
 
             else:
                 possible_actions = get_possible_actions(state_idx, size)
+                transition_probs[state_idx] = p_success # cant take action, stay in same place
                 for other_action in possible_actions:
-                    transition_probs[get_state_after_executing_action(other_action, state_idx, size)] = (p_success+p_fail)/len(possible_actions)
+                    transition_probs[get_state_after_executing_action(other_action, state_idx, size)] = p_fail/len(possible_actions)
+
         else:
             raise InvalidActionError('Invalid action {} in the 2D gridworld'.format(action))
         return transition_probs

@@ -38,3 +38,34 @@ def test_get_state_after_executing_action():
     assert get_state_after_executing_action(actions.UP, 3, GRID_SIZE) == 1
     assert get_state_after_executing_action(actions.UP, 1, GRID_SIZE) == 1
     assert get_state_after_executing_action(actions.RIGHT, 1, GRID_SIZE) == 1
+
+def test_build_simple_grid():
+    P = build_simple_grid(GRID_SIZE, p_success=0.9)
+    assert P.shape == (4, 4, 4)
+    assert np.allclose(P.sum(2), 1), 'P is not a stochastic matrix.'
+    print(P)
+    # taking an action that is not possible.
+    assert np.allclose(P[0, actions.LEFT, 0], 0.9)
+    assert np.allclose(P[0, actions.LEFT, 1], 0.05)
+    assert np.allclose(P[0, actions.LEFT, 2], 0.05)
+
+    # right edge checking
+    assert np.allclose(P[1, actions.RIGHT, 2], 0)
+    assert np.allclose(P[1, actions.RIGHT, 1], 0.9)
+    assert np.allclose(P[1, actions.RIGHT, 0], 0.05)
+    assert np.allclose(P[1, actions.RIGHT, 3], 0.05)
+
+    # right edge taking action that is possible
+
+    assert np.allclose(P[1, actions.LEFT, 2], 0)
+    assert np.allclose(P[1, actions.LEFT, 0], 0.9)
+    assert np.allclose(P[1, actions.LEFT, 3], 0.1)
+    # assert np.allclose(P[1, actions.LEFT, 1], 0.05)
+
+
+    P = build_simple_grid(GRID_SIZE, terminal_states=[(0, 1)], p_success=0.9)
+    assert P.shape == (5, 4, 5)
+    print(P)
+    assert np.allclose(P.sum(2), 1), 'P is not a stochastic matrix'
+    assert np.allclose(P[-1, :, -1], 1), 'All actions from absorbing state must lead to absorbing state'
+    assert np.allclose(P[1, :, -1], 1), 'From the terminal state all actions should lead to the absorbing state.'
