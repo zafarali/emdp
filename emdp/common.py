@@ -48,6 +48,11 @@ class MDP(Env):
         self.done = False
         return self.current_state
 
+    def set_current_state_to(self, state):
+        self.current_state = utils.convert_int_rep_to_onehot(state, self.state_space)
+        self.done = False
+        return self.current_state
+
     def step(self, action):
         """
         :param action: An integer representing the action taken.
