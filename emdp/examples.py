@@ -1,6 +1,6 @@
 import numpy as np
-from emdp.actions import LEFT, RIGHT, UP, DOWN
-from emdp.gridworld.helper_utilities import build_simple_grid
+from emdp import actions
+from emdp.gridworld.helper_utilities import build_simple_grid, check_can_take_action
 from emdp.gridworld.env import GridWorldMDP
 from emdp.common import MDP
 
@@ -28,9 +28,17 @@ def build_SB_example35():
     P[3, :, 13] = 1  # now set the probability of going from 3 to 13 with prob 1 for all actions
 
     # TODO: add rewards for walking off the grid
+
+
     R = np.zeros((P.shape[0], P.shape[1])) # initialize a matrix of size |S|x|A|
+
+    for state in range(P.shape[0]):
+        for action in [actions.UP, actions.LEFT, actions.RIGHT, actions.DOWN]:
+            if not check_can_take_action(action, state, size):
+                R[state, action] = -1
+
     R[1, :] = +10
-    R[3, :] = +1
+    R[3, :] = +5
 
     p0 = np.ones(P.shape[0])/P.shape[0] # uniform starting probability (assumed)
     gamma = 0.9
