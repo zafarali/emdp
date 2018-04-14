@@ -52,5 +52,5 @@ def calculate_V_pi(P, R, pi, gamma):
     """
     P_pi = calculate_P_pi(P, pi)
     R_pi = calculate_R_pi(R, pi)
-    Phi = calculate_successor_representation(P_pi, R_pi, gamma)
+    Phi = calculate_successor_representation(P_pi, gamma)
     return calculate_V_pi_from_successor_representation(Phi, R_pi)
