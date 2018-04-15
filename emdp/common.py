@@ -63,6 +63,12 @@ class MDP(Env):
         if action >= self.action_space or type(action) is not int:
             raise InvalidActionError('Invalid action {}. It must be an integer between 0 and {}'.format(action, self.action_space-1))
 
+        # we end from this episode onwards.
+        # this check is done after entering terminal state
+        # because we can only give the reward after leaving
+        # a terminal state.
+        if self.current_state.argmax() in self.terminal_states:
+            self.done = True
 
         # get the vector representing the next state probabilities:
         current_state_idx = utils.convert_onehot_to_int(self.current_state)
@@ -74,9 +80,5 @@ class MDP(Env):
         reward = self.R[current_state_idx, action]
 
         self.current_state = utils.convert_int_rep_to_onehot(sampled_next_state, self.state_space)
-
-
-        if sampled_next_state in self.terminal_states:
-            self.done = True
 
         return self.current_state, reward, self.done, {'gamma':self.gamma}

@@ -9,7 +9,8 @@ from ..actions import LEFT, RIGHT, UP, DOWN
 from .helper_utilities import flatten_state, unflatten_state
 
 class GridWorldMDP(MDP):
-    def __init__(self, P, R, gamma, p0, terminal_states, size, seed=1337, skip_check=False):
+    def __init__(self, P, R, gamma, p0, terminal_states, size, seed=1337, skip_check=False,
+                 convert_terminal_states_to_ints=False):
         """
         (!) if terminal_states is not empty then there will be an absorbing state. So
             the actual number of states will be size x size + 1
@@ -18,11 +19,13 @@ class GridWorldMDP(MDP):
         :param R: Transition matrix |S| x |A|
         :param gamma: discount factor
         :param p0: initial starting distribution
-        :param terminal_states: the terminal states (a list of ints, make sure to convert tuples to ints!)
+        :param terminal_states: Must be a list of (x,y) tuples.  use skip_terminal_state_conversion if giving ints
         :param size: the size of the grid world (i.e there are size x size (+ 1)= |S| states)
         :param seed:
         :param skip_check:
         """
+        if not convert_terminal_states_to_ints:
+            terminal_states = list(map(lambda tupl: int(size * tupl[0] + tupl[1]), terminal_states))
         super().__init__(P, R, gamma, p0, terminal_states, seed=seed, skip_check=skip_check)
         self.size =  size
         self.human_state = (None, None)

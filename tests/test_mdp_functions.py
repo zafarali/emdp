@@ -22,9 +22,15 @@ def test_simple_reset_MDP():
 
     # simulate another step
     state, reward, done, _ = mdp.step(1) # right step
-    assert done
     assert np.all(np.equal(state, np.array([0, 1])))
     assert reward == +5
+    assert not done
+
+    # simulate another step (should return done)
+    state, reward, done, _ = mdp.step(1)  # right step
+    assert np.all(np.equal(state, np.array([0, 1])))
+    assert reward == 0
+    assert done
 
     try:
         mdp.step(0)
