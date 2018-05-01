@@ -113,7 +113,7 @@ for _ in range(3): # 3 trajectories
 Now `trajectories` contains a list of lists of numpy arrays which represent the states. You can easily obtain trajectory plots and state visitation heatmaps:
 
 ```python
-fig = plt.figure(figsize=(5, 8))
+fig = plt.figure(figsize=(10, 4))
 ax = fig.add_subplot(121)
 
 # trajectory
@@ -122,11 +122,13 @@ gwp.plot_grid(ax)
 
 # heatmap
 ax = fig.add_subplot(122)
-gwp.plot_trajectories(ax, trajectories)
 gwp.plot_heatmap(ax, trajectories)
+gwp.plot_grid(ax)
 ```
 
-# TODO: finish this
+You will get something like this:
+
+![image](https://user-images.githubusercontent.com/6295292/39478972-e2d6bab4-4d31-11e8-96d2-0aac759c504d.png)
 
 
 ### Accessing transition dynamics
