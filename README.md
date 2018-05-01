@@ -2,6 +2,7 @@
 
 Easy MDPs implemented in a gym like interface with access to transition dynamics.
 
+Jump to topics: [Installation](#installation) | [Grid World](#grid-world) | [Grid World->Plotting](#Installation)
 
 ## Installation
 
@@ -79,7 +80,6 @@ def build_SB_example35():
     return gw.GridWorldMDP(P, R, gamma, p0, terminal_states, size)
 ```
 
-
 To actually use this there is a gym like interface where you can move around:
 
 ```python
@@ -87,6 +87,47 @@ To actually use this there is a gym like interface where you can move around:
 mdp = build_SB_example35()
 state, reward, done, _ = mdp.step(actions.UP) # moves the agent up.
 ```
+
+#### Plotting GridWorlds
+
+There are some tools built in for quickly plotting trajectories obtained from the `GridWorldMDP`s.
+
+```python
+from emdp.gridworld import GridWorldPlotter
+from emdp import actions
+import random
+gwp = GridWorldPlotter(mdp.size, mdp.has_absorbing_state) # alternatively you can use GridWorldPlotter.from_mdp(mdp)
+
+# collect some trajectories from the GridWorldMDP object:
+
+trajectories = []
+for _ in range(3): # 3 trajectories
+  trajectory = [mdp.reset()]
+  for _ in range(100): # 100 steps maximum
+    state, reward, done, info = mdp.step(random.sample([actions.LEFT, actions.RIGHT, 
+                                                        actions.DOWN, actions.UP], 1)[0])
+    trajectory.append(state)
+  trajectories.append(trajectory)
+```
+
+Now `trajectories` contains a list of lists of numpy arrays which represent the states. You can easily obtain trajectory plots and state visitation heatmaps:
+
+```python
+fig = plt.figure(figsize=(5, 8))
+ax = fig.add_subplot(121)
+
+# trajectory
+gwp.plot_trajectories(ax, trajectories)
+gwp.plot_grid(ax)
+
+# heatmap
+ax = fig.add_subplot(122)
+gwp.plot_trajectories(ax, trajectories)
+gwp.plot_heatmap(ax, trajectories)
+```
+
+# TODO: finish this
+
 
 ### Accessing transition dynamics
 
