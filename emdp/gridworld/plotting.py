@@ -88,7 +88,7 @@ class GridWorldPlotter(object):
         state_visitations = np.zeros((self.size, self.size))
         for trajectory in trajectories_unflat:
             for state in trajectory:
-                state_visitations[state[0], state[1]] += 1
+                state_visitations[self.size-1-state[1], state[0]] += 1
 
         imshow_ax = ax.imshow(state_visitations, interpolation=None)
         plt.colorbar(imshow_ax)
