@@ -2,7 +2,7 @@
 
 Easy MDPs implemented in a gym like interface with access to transition dynamics.
 
-Jump to topics: [Installation](#installation) | [Grid World](#grid-world) | [Grid World->Plotting](#Installation)
+Jump to topics: [Installation](#installation) | [Grid World](#grid-world) | [Grid World->Plotting](#plotting-gridworlds)
 
 ## Installation
 
