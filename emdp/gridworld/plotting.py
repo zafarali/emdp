@@ -91,7 +91,6 @@ class GridWorldPlotter(object):
                 state_visitations[self.size-1-state[1], state[0]] += 1
 
         imshow_ax = ax.imshow(state_visitations, interpolation=None)
-        plt.colorbar(imshow_ax)
         ax.grid(False)
 
         return ax, imshow_ax
