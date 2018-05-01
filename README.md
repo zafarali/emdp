@@ -103,7 +103,7 @@ gwp = GridWorldPlotter(mdp.size, mdp.has_absorbing_state) # alternatively you ca
 trajectories = []
 for _ in range(3): # 3 trajectories
   trajectory = [mdp.reset()]
-  for _ in range(100): # 100 steps maximum
+  for _ in range(10): # 10 steps maximum
     state, reward, done, info = mdp.step(random.sample([actions.LEFT, actions.RIGHT, 
                                                         actions.DOWN, actions.UP], 1)[0])
     trajectory.append(state)
@@ -128,7 +128,7 @@ gwp.plot_grid(ax)
 
 You will get something like this:
 
-![image](https://user-images.githubusercontent.com/6295292/39478972-e2d6bab4-4d31-11e8-96d2-0aac759c504d.png)
+![image](https://user-images.githubusercontent.com/6295292/39479043-20587d32-4d32-11e8-82ae-7deddca8dc07.png)
 
 
 ### Accessing transition dynamics
