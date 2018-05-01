@@ -24,6 +24,8 @@ class GridWorldPlotter(object):
     @staticmethod
     def from_mdp(mdp):
         # TODO: obtain reward specifications
+        if not isinstance(mdp, (GridWorldMDP,)):
+            raise TypeError('Only GridWorldMDPs can be used with GridWorldPlotters')
         return GridWorldPlotter(mdp.size, mdp.has_absorbing_state)
 
     def plot_grid(self, ax):
