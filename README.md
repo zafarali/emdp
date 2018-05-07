@@ -130,7 +130,7 @@ You will get something like this:
 
 ![image](https://user-images.githubusercontent.com/6295292/39479043-20587d32-4d32-11e8-82ae-7deddca8dc07.png)
 
-### Customization
+#### Customization
 
 There is an interface to add walls and blockages to the gridworld.
 
