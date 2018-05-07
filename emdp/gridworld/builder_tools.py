@@ -71,7 +71,7 @@ class TransitionMatrixBuilder(object):
         normalization = 1/normalization
         self._P = (self._P * np.repeat(normalization, self._P.shape[0]).reshape(*self._P.shape))
 
-        assert np.all(np.equal(self._P.sum(2), 1)), 'Normalization did not occur correctly: {}'.format(self._P.sum(2))
+        assert np.allclose(self._P.sum(2), 1), 'Normalization did not occur correctly: {}'.format(self._P.sum(2))
         self._P_modified = True
 
     @property
@@ -108,13 +108,18 @@ class TransitionMatrixBuilder(object):
         start_idx = start[direction]
         end_idx = end[direction]
 
+        if end_idx < start_idx:
+            # flip start and end directions
+            # to ensure we can still draw walls
+            start_idx, end_idx = end_idx, start_idx
+
         for i in range(start_idx, end_idx+1):
             my_location = [None, None]
             my_location[direction] = i
             my_location[int(not direction)] = constant_idx
-
+            print(my_location)
             self.add_wall_at(tuple(my_location))
-        
+
 
 def create_reward_matrix(state_space, size, reward_spec, action_space=4):
     """

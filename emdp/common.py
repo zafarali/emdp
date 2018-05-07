@@ -26,7 +26,7 @@ class MDP(Env):
         :param seed: the random seed for simulations.
         """
         super().__init__(seed)
-        if not skip_check: assert np.all(P.sum(axis=2) == 1), 'Transition matrix does not seem to be a stochastic matrix ' \
+        if not skip_check: assert np.allclose(P.sum(axis=2), 1), 'Transition matrix does not seem to be a stochastic matrix ' \
                                            '(i.e. the sum over states for each action doesn not equal 1'
         self.P = P
         self.R = R
