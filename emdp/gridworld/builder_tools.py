@@ -53,8 +53,6 @@ class TransitionMatrixBuilder(object):
         target_state = flatten_state(tuple_location, self.grid_size, self.state_space)
         target_state = target_state.argmax()
         # find all the ways to go to "target_state"
-        print(target_state)
-        print(self._P.shape)
         # from_states contains states that can lead you to target_state by executing from_action
         from_states, from_actions = np.where(self._P[:, :, target_state] != 0)
 
