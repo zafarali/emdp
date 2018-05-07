@@ -149,6 +149,20 @@ Using the above interface we have built a wall within our gridworld. Visualizing
 ![image](https://user-images.githubusercontent.com/6295292/39713910-667750c2-51f6-11e8-9e80-b24b4861afda.png)
 
 
+Alternatively, you can use `add_wall_between` which creates a straight line of walls between two positions on the grid.
+So the following code will produce
+```python
+from emdp.gridworld.builder_tools import TransitionMatrixBuilder
+builder = TransitionMatrixBuilder(grid_size=5, has_terminal_state=False)
+builder.add_grid([], p_success=1)
+builder.add_wall_between((0,2), (1, 2))
+builder.add_wall_between((3,2), (4, 2))
+builder.add_wall_between((1,1), (1, 3))
+```
+
+![image](https://user-images.githubusercontent.com/6295292/39715133-376e147e-51fa-11e8-98c4-d14528c330a6.png)
+
+
 ## Accessing transition dynamics
 
 You can access transition dynamics by inspecting the `MDP` object:
