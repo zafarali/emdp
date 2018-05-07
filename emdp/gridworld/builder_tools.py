@@ -51,7 +51,7 @@ class TransitionMatrixBuilder(object):
         :return:
         """
         target_state = flatten_state(tuple_location, self.grid_size, self.state_space)
-        target_state = target_state.argmax()+1
+        target_state = target_state.argmax()
         # find all the ways to go to "target_state"
         print(target_state)
         print(self._P.shape)
