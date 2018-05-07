@@ -87,7 +87,34 @@ class TransitionMatrixBuilder(object):
             return self._P.copy()
 
 
-# class RewardMatrixBuilder()
+    def add_wall_between(self, start, end):
+        """
+        Adds a wall between the starting and ending location
+        :param start: tuple (x,y) representing the starting position of the wall
+        :param end: tuple (x,y) representing the ending position of the wall
+        :return:
+        """
+        if not(start[0] == end[0] or start[1] == end[1]):
+            raise ValueError('Walls can only be drawn in straight lines. '
+                             'Therefore, at least one of the x or y between '
+                             'the states should match.')
+
+        if start[0] == end[0]:
+            direction = 1
+        else:
+            direction = 0
+
+        constant_idx = start[int(not direction)]
+        start_idx = start[direction]
+        end_idx = end[direction]
+
+        for i in range(start_idx, end_idx+1):
+            my_location = [None, None]
+            my_location[direction] = i
+            my_location[int(not direction)] = constant_idx
+
+            self.add_wall_at(tuple(my_location))
+        
 
 def create_reward_matrix(state_space, size, reward_spec, action_space=4):
     """
