@@ -118,5 +118,5 @@ class GridWorldPlotter(object):
         :param trajectories:
         :return:
         """
-        return map(lambda traj: list(map(self.unflatten, traj)), trajectories)
+        return map(lambda traj: list(map(self._unflatten, traj)), trajectories)
 
