@@ -1,4 +1,4 @@
-from emdp.examples import build_SB_example35
+from emdp.examples import build_SB_example35, build_four_rooms_example
 from emdp import actions
 
 def test_SB_example35():
@@ -20,4 +20,7 @@ def test_SB_example35():
     assert not done
     assert reward == +10
     assert mdp.unflatten_state(state) == (4, 1)
+
+def test_four_rooms_loads():
+    assert build_four_rooms_example() is not None
 

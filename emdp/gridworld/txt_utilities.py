@@ -45,7 +45,7 @@ def build_gridworld_from_char_matrix(char_matrix, p_success=1, seed=2017, gamma=
             elif char == 'g':
                 assert goal_loc is None, 'Goal loc was overwritten!'
                 goal_loc = (r, c)
-            else:
+            elif char != ' ':
                 raise ValueError('Unknown character {} in grid.'.format(char))
     # Attempt to make the desired gridworld.
     reward_spec = {(goal_loc[0], goal_loc[1]): +1}
