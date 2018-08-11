@@ -102,3 +102,39 @@ class GridWorldPlotter(object):
         :return:
         """
         return map(lambda traj: list(map(self.unflatten, traj)), trajectories)
+
+class GridWorldPlotterV2(GridWorldPlotter):
+    def __init__(self, mdp):
+        self.mdp = mdp
+        self.size = self.mdp.size
+        self.has_absorbing_state = self.mdp.has_absorbing_state
+        return
+
+    def _unflatten(self, onehot_state):
+        return unflatten_state(onehot_state, self.size, self.has_absorbing_state)
+
+    def plot_heatmap(self, ax, trajectories, wall_locs=None):
+        trajectories_unflat = list(self.unflat_trajectories(trajectories))
+        state_visitations = np.zeros((self.size, self.size))
+        # plot actual state visitation heatmap
+        for trajectory in trajectories_unflat:
+            for state in trajectory:
+                x_coord = (self.size - 1 - state[0])
+                y_coord = (self.size - 1 - state[1])
+                state_visitations[y_coord, x_coord] += 1.
+        # plot walls in lame way -- set them to some hand-engineered color
+        wall_img = np.zeros((self.size, self.size, 4))
+        if wall_locs is not None:
+            mid_visits = (np.max(state_visitations) - np.min(state_visitations)) / 2.
+            for state in wall_locs:
+                x_coord = (self.size - 1 - state[0])
+                y_coord = (self.size - 1 - state[1])
+                wall_img[y_coord, x_coord, 0] = 0.6  # R
+                wall_img[y_coord, x_coord, 1] = 0.4  # G
+                wall_img[y_coord, x_coord, 2] = 0.4  # B
+                wall_img[y_coord, x_coord, 3] = 1.0  # alpha
+        # render heatmap and overlay the walls image
+        imshow_ax = ax.imshow(state_visitations, interpolation=None)
+        imshow_ax = ax.imshow(wall_img, interpolation=None)
+        ax.grid(False)
+        return ax, imshow_ax
