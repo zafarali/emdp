@@ -140,7 +140,12 @@ def create_reward_matrix(state_space, size, reward_spec, action_space=4):
 """
 Simple builders for gridworlds
 """
-def build_simple_grid_world_with_terminal_states(reward_spec, size, p_success=1, gamma=0.99, seed=2017):
+def build_simple_grid_world_with_terminal_states(reward_spec,
+                                                 size,
+                                                 p_success=1,
+                                                 gamma=0.99,
+                                                 seed=2017,
+                                                 start_state=0):
     """
     A simple size x size grid world where agents actions has a prob of p_success of executing correctly.
     rewards are given by a dict where the indices and the x,y positions and the value is the magnitude of the reward.
@@ -150,16 +155,23 @@ def build_simple_grid_world_with_terminal_states(reward_spec, size, p_success=1,
     :param p_success: The probability the action is successful.
     :param gamma: The discount factor.
     :param seed: Seed for the GridWorldMDP object.
+    :param start_state: The index of the starding state.
     :return:
     """
     P = build_simple_grid(size=size, terminal_states=reward_spec.keys(), p_success=p_success)
     R = create_reward_matrix(P.shape[0], size, reward_spec, action_space=4)
-    p0 = np.array([1] + [0]*(P.shape[0]-1)) #starting state distribution
+    p0 = np.zeros(P.shape[0])
+    p0[start_state] = 1
 
     return GridWorldMDP(P, R, gamma, p0, terminal_states=reward_spec.keys(), size=size, seed=seed)
 
 
-def build_simple_grid_world_without_terminal_states(reward_spec, size, p_success=1, gamma=0.99, seed=2017):
+def build_simple_grid_world_without_terminal_states(reward_spec,
+                                                    size,
+                                                    p_success=1,
+                                                    gamma=0.99,
+                                                    seed=2017,
+                                                    start_state=0):
     """
     A simple size x size grid world where agents actions has a prob of p_success of executing correctly.
     rewards are given by a dict where the indices and the x,y positions and the value is the magnitude of the reward.
@@ -169,11 +181,13 @@ def build_simple_grid_world_without_terminal_states(reward_spec, size, p_success
     :param p_success: The probability the action is successful.
     :param gamma: The discount factor.
     :param seed: Seed for the GridWorldMDP object.
+    :param start_state: The index of the starting state.
     :return:
     """
     P = build_simple_grid(size=size, terminal_states=[], p_success=p_success)
     R = create_reward_matrix(P.shape[0], size, reward_spec, action_space=4)
-    p0 = np.array([1] + [0]*(P.shape[0]-1)) #starting state distribution
+    p0 = np.zeros(P.shape[0])
+    p0[start_state] = 1
 
     return GridWorldMDP(P, R, gamma, p0, terminal_states=[], size=size, seed=seed)
 
