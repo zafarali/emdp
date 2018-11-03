@@ -1,4 +1,4 @@
-from emdp.examples import build_SB_example35
+from emdp.examples import build_SB_example35, build_four_rooms_example
 from emdp.examples import tricky_gridworlds
 from emdp import actions
 
@@ -21,6 +21,10 @@ def test_SB_example35():
     assert not done
     assert reward == +10
     assert mdp.unflatten_state(state) == (4, 1)
+
+
+def test_four_rooms_loads():
+    assert build_four_rooms_example() is not None
 
 
 def test_make_multi_minima_reward_env():
@@ -59,3 +63,4 @@ def test_four_minima_env():
     assert reward_spec[(2, 4)] == 0.5
     assert reward_spec[(4, 2)] == 1
     assert world.p0.argmax() == 12 # Middle of the array.
+
