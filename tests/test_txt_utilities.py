@@ -1,5 +1,5 @@
 from emdp.gridworld import txt_utilities
-from emdp.examples import _EXAMPLE_FOUR_ROOMS_TXT
+from emdp.examples.simple import _EXAMPLE_FOUR_ROOMS_TXT
 
 LOCATION_OF_ROOM_FILE = './tests/example_room.txt'
 
