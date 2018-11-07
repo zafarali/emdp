@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_pacakges
 from emdp import __version__
 
 setup(
@@ -10,6 +10,7 @@ setup(
     author='Zafarali Ahmed',
     author_email='zafarali.ahmed@gmail.com',
     license='MIT',
+    packages=find_packages(), 
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
