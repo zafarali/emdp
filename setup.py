@@ -1,4 +1,4 @@
-from setuptools import setup, find_pacakges
+from setuptools import setup, find_packages
 from emdp import __version__
 
 setup(
