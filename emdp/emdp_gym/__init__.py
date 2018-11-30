@@ -1,3 +1,4 @@
+from emdp.emdp_gym.gym_wrap import gymify
 from gym.envs.registration import register
 
 register(
