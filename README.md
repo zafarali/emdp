@@ -178,3 +178,14 @@ mdp.terminal_states # the location of the terminal states
 ### Absorbing states
 
 If you have an absorbing state in your MDP, it must be the last one. All actions executed in the absorbing state must lead to itself.
+
+
+## Current usage
+
+I use this code consistently in many pieces of work. If you use it, let me know and I'll be happy to add them here. Here are a few preprints that are available:
+
+
+- [Bachman, Philip, et al. "Vfunc: a deep generative model for functions." arXiv preprint arXiv:1807.04106 (2018).](https://arxiv.org/abs/1807.04106)
+- [Ahmed, Zafarali, et al. "Understanding the impact of entropy in policy learning." arXiv preprint arXiv:1811.11214 (2018).](https://arxiv.org/abs/1811.11214)
+
+
