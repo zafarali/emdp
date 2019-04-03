@@ -20,7 +20,7 @@ def build_imani_counterexample():
     P[2, 1] = [0, 0, 0, 1]
     P[3, 0] = [0, 0, 0, 1]
     P[3, 1] = [0, 0, 0, 1]
-    gamma = 1.0
+    gamma = 0.99999
     R = np.zeros((STATES, ACTIONS))
     R[0, 0] = 0
     R[0, 1] = 1
