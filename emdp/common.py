@@ -10,6 +10,9 @@ class Env(object):
         """
         :param seed: A seed for the random number generator.
         """
+        self.set_seed(seed)
+
+    def set_seed(self, seed):
         self.rng = np.random.RandomState(seed)
 
 class MDP(Env):
