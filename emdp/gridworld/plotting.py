@@ -1,6 +1,5 @@
 from .helper_utilities import unflatten_state
 from .env import GridWorldMDP
-import matplotlib.pyplot as plt
 import numpy as np
 
 class GridWorldPlotter(object):
