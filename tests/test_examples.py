@@ -1,6 +1,8 @@
 from emdp.examples import build_SB_example35, build_four_rooms_example
 from emdp.examples import tricky_gridworlds
+from emdp.examples import build_cake_world_mdp
 from emdp import actions
+from emdp import analytic
 
 def test_SB_example35():
 
@@ -64,3 +66,21 @@ def test_four_minima_env():
     assert reward_spec[(4, 2)] == 1
     assert world.p0.argmax() == 12 # Middle of the array.
 
+def test_cakeworld_mdp():
+    """Numerical test for cake world mdp.
+
+    This numerical test ensures that calculations from implemented MDP represent
+    those that are obtained from calculations in the paper.
+    """
+    epsilon = 0.1
+    discount = 0.99
+    built_mdp = build_cake_world_mdp(epsilon=0.1, discount=0.99)
+    eval_policy = np.array([[0.5, 0.5], [0.5, 0.5]])
+
+    calc_v_pi = analytic.calculate_V_pi(
+        built_mdp.P, built_mdp.R, eval_policy, built_mdp.gamma)
+
+    # Value of "Bad State" is independent of policy.
+    expected_value = -2.0 * (1 + epsilon) / discount
+    calculated_value = calc_v_pi[1]
+    assert np.isclose(calculated_value, expected_value)
