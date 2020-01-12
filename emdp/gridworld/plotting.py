@@ -100,8 +100,8 @@ class GridWorldPlotter(object):
         if wall_locs is not None:
             mid_visits = (np.max(state_visitations) - np.min(state_visitations)) / 2.
             for state in wall_locs:
-                x_coord = state[0]
-                y_coord = state[1]
+                y_coord = state[0]
+                x_coord = state[1]
                 wall_img[y_coord, x_coord, 0] = 0.6  # R
                 wall_img[y_coord, x_coord, 1] = 0.4  # G
                 wall_img[y_coord, x_coord, 2] = 0.4  # B
