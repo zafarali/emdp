@@ -92,16 +92,16 @@ class GridWorldPlotter(object):
         # plot actual state visitation heatmap
         for trajectory in trajectories_unflat:
             for state in trajectory:
-                x_coord = (self.size - 1 - state[0])
-                y_coord = (self.size - 1 - state[1])
+                x_coord =state[0]
+                y_coord = state[1]
                 state_visitations[y_coord, x_coord] += 1.
         # plot walls in lame way -- set them to some hand-engineered color
         wall_img = np.zeros((self.size, self.size, 4))
         if wall_locs is not None:
             mid_visits = (np.max(state_visitations) - np.min(state_visitations)) / 2.
             for state in wall_locs:
-                x_coord = (self.size - 1 - state[0])
-                y_coord = (self.size - 1 - state[1])
+                x_coord = state[0]
+                y_coord = state[1]
                 wall_img[y_coord, x_coord, 0] = 0.6  # R
                 wall_img[y_coord, x_coord, 1] = 0.4  # G
                 wall_img[y_coord, x_coord, 2] = 0.4  # B
