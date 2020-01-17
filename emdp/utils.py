@@ -9,7 +9,7 @@ def convert_int_rep_to_onehot(state, vector_size):
 def convert_onehot_to_int(state):
     if type(state) is not np.ndarray:
         state = np.array(state)
-    return state.argmax().astype(np.int8)
+    return state.argmax().item()
 #
 # def xy_to_flatten_state(state, size):
 #     """Flatten state (x,y) into a one hot vector of size"""
