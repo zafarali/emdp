@@ -71,7 +71,7 @@ class GridWorldPlotter(object):
 
         return ax
 
-    def plot_environment(self, ax, wall_locs=None, color_map=None):
+    def plot_environment(self, ax, wall_locs=None, plot_grid=False):
         """
         Plots the environment  with walls.
         :param ax: The axes to plot this on
@@ -80,7 +80,7 @@ class GridWorldPlotter(object):
         """
 
         # plot states with background color white
-        state_background = np.ones((self.size, self.size)) # white #0000
+        state_background = np.ones((self.size, self.size))
 
         # plot walls in lame way -- set them to some hand-engineered color
         wall_img = np.zeros((self.size, self.size, 4))
@@ -97,6 +97,17 @@ class GridWorldPlotter(object):
         imshow_ax = ax.imshow(state_background, interpolation=None)
         imshow_ax = ax.imshow(wall_img, interpolation=None)
         ax.grid(False)
+
+        # Switch on flag if you want to plot grid
+        if plot_grid:
+            for i in range(self.size + 1):
+                ax.plot(np.arange(self.size + 1) - 0.5, np.ones(self.size + 1) * i - 0.5, color='k')
+
+            for i in range(self.size + 1):
+                ax.plot(np.ones(self.size + 1) * i - 0.5, np.arange(self.size + 1) - 0.5, color='k')
+            ax.set_xlabel('x')
+            ax.set_ylabel('y')
+
         return ax, imshow_ax
 
     def plot_heatmap(self, ax, trajectories, dont_unflatten=False, wall_locs=None):
