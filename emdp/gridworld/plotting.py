@@ -71,6 +71,34 @@ class GridWorldPlotter(object):
 
         return ax
 
+    def plot_environment(self, ax, wall_locs=None, color_map=None):
+        """
+        Plots the environment  with walls.
+        :param ax: The axes to plot this on
+        :param wall_locs: Locations of the walls for plotting them in a different color..
+        :return:
+        """
+
+        # plot states with background color white
+        state_background = np.ones((self.size, self.size)) # white #0000
+
+        # plot walls in lame way -- set them to some hand-engineered color
+        wall_img = np.zeros((self.size, self.size, 4))
+        if wall_locs is not None:
+            for state in wall_locs:
+                y_coord = state[0]
+                x_coord = state[1]
+                wall_img[y_coord, x_coord, 0] = 0.0  # R
+                wall_img[y_coord, x_coord, 1] = 0.0  # G
+                wall_img[y_coord, x_coord, 2] = 0.0  # B
+                wall_img[y_coord, x_coord, 3] = 1.0  # alpha
+
+        # render heatmap and overlay the walls image
+        imshow_ax = ax.imshow(state_background, interpolation=None)
+        imshow_ax = ax.imshow(wall_img, interpolation=None)
+        ax.grid(False)
+        return ax, imshow_ax
+
     def plot_heatmap(self, ax, trajectories, dont_unflatten=False, wall_locs=None):
         """
         Plots a state-visitation heatmap with walls.
