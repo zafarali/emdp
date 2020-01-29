@@ -13,7 +13,13 @@ def get_char_matrix(raw_file):
     return [[c for c in line.strip('\n')] for line in raw_file]
 
 
-def build_gridworld_from_char_matrix(char_matrix, p_success=1, seed=2017, gamma=1, skip_checks=False):
+def build_gridworld_from_char_matrix(
+  char_matrix,
+  p_success=1,
+  seed=2017,
+  gamma=1,
+  skip_checks=False,
+  transition_matrix_builder_cls=TransitionMatrixBuilder):
     """
     A parser to build a gridworld from a text file.
     Each grid has ONE start and goal location.
@@ -22,6 +28,7 @@ def build_gridworld_from_char_matrix(char_matrix, p_success=1, seed=2017, gamma=
     :param p_success: Probability that the action is successful.
     :param seed: The seed for the GridWorldMDP object.
     :param skip_checks: Skips assertion checks.
+    :transition_matrix_builder_cls: The transition matrix builder to use.
     :return:
     """
     grid_size = len(char_matrix[0])
@@ -51,7 +58,7 @@ def build_gridworld_from_char_matrix(char_matrix, p_success=1, seed=2017, gamma=
     reward_spec = {(goal_loc[0], goal_loc[1]): +1}
 
 
-    tmb = TransitionMatrixBuilder(grid_size,  has_terminal_state=True)
+    tmb = transition_matrix_builder_cls(grid_size,  has_terminal_state=True)
     tmb.add_grid(terminal_states=reward_spec.keys(), p_success=p_success)
     for (r, c) in wall_locs:
         tmb.add_wall_at((r, c))
