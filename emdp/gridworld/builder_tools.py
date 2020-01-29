@@ -44,6 +44,7 @@ class TransitionMatrixBuilder(object):
         self.grid_added = True
         self.P_modified = True
 
+
     def add_wall_at(self, tuple_location):
         """
         Add a blockade at this position
@@ -65,6 +66,17 @@ class TransitionMatrixBuilder(object):
             transition_probs_from[i, from_state] += tmp # add the transition prob to staying in the same place
 
         self._P[from_states, from_actions, :] = transition_probs_from
+
+        # Get the probability of going to any state for all actions from target_state.
+        transition_probs_from_wall = self._P[target_state, :, :]
+        for i, probs_from_action in enumerate(transition_probs_from_wall):
+            # Reset the probabilities.
+            transition_probs_from_wall[i, :] = 0.0
+            # Set the probability of going to the target state to be 1.0
+            transition_probs_from_wall[i, target_state] = 1.0
+        # Now set the probs of going to any state from target state as above (i.e only targets).
+        self._P[target_state, :, :] = transition_probs_from_wall
+
         # renormalize and update transition matrix.
         normalization = self._P.sum(2)
         # normalization[normalization == 0] = 1
@@ -72,6 +84,7 @@ class TransitionMatrixBuilder(object):
         self._P = (self._P * np.repeat(normalization, self._P.shape[0]).reshape(*self._P.shape))
 
         assert np.allclose(self._P.sum(2), 1), 'Normalization did not occur correctly: {}'.format(self._P.sum(2))
+        assert np.allclose(self._P[target_state, :, target_state], 1.0), 'All actions from wall should lead to wall!'
         self._P_modified = True
 
     @property
