@@ -63,7 +63,7 @@ class MDP(Env):
         """
         if self.done:
             raise EpisodeDoneError('The episode has terminated. Use .reset() to restart the episode.')
-        if action >= self.action_space or type(action) is not int:
+        if action >= self.action_space or not isinstance(action, int):
             raise InvalidActionError('Invalid action {}. It must be an integer between 0 and {}'.format(action, self.action_space-1))
 
         # we end from this episode onwards.
