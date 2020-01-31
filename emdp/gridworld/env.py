@@ -26,11 +26,11 @@ class GridWorldMDP(MDP):
         """
         if not convert_terminal_states_to_ints:
             terminal_states = list(map(lambda tupl: int(size * tupl[0] + tupl[1]), terminal_states))
-        super().__init__(P, R, gamma, p0, terminal_states, seed=seed, skip_check=skip_check)
         self.size =  size
         self.human_state = (None, None)
-        self.reset()
         self.has_absorbing_state = len(terminal_states) > 0
+        super().__init__(P, R, gamma, p0, terminal_states, seed=seed, skip_check=skip_check)
+        # self.reset()
 
     def reset(self):
         super().reset()
