@@ -1,3 +1,5 @@
+import numpy as np
+
 from emdp.examples import build_SB_example35, build_four_rooms_example
 from emdp.examples import tricky_gridworlds
 from emdp.examples import build_cake_world_mdp
