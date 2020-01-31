@@ -40,4 +40,4 @@ def test_gym_int_observation():
         examples.build_SB_example35(),
         observation_one_hot=False)
     state = env.reset()
-    assert type(state) == np.int8
+    assert type(state) == int
