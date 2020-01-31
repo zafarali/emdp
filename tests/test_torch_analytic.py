@@ -1,9 +1,9 @@
-from emdp.torch_analytic import calculate_V_pi
 from emdp.examples import build_SB_example35
 import numpy as np
 
 try:
     import torch
+    from emdp.torch_analytic import calculate_V_pi
     torch_imported = True
 except ImportError:
     # Torch test will not be applied.
