@@ -31,9 +31,10 @@ class GridWorldMDP(MDP):
         self.has_absorbing_state = len(terminal_states) > 0
         super().__init__(P, R, gamma, p0, terminal_states, seed=seed, skip_check=skip_check)
 
-    #def reset(self):
-    #    super().reset()
-    #    self.human_state = self.unflatten_state(self.current_state)
+    def reset(self):
+        super().reset()
+        self.human_state = self.unflatten_state(self.current_state)
+        return self.current_state
 
     def flatten_state(self, state):
         """Flatten state (x,y) into a one hot vector"""
