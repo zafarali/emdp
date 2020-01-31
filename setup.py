@@ -2,6 +2,10 @@ from setuptools import setup, find_packages
 from emdp import __version__
 
 base_requirements = ['numpy>=1.9.1']
+extras = {
+    'tests': ['gym', 'matplotlib'],
+    'gym': ['gym']
+}
 
 setup(
     name='emdp',
@@ -22,7 +26,7 @@ setup(
         'Programming Language :: Python :: 3.5',
     ],
     python_requires='>=3.5',
+    extras_require=extras,
     install_requires=base_requirements,
-    tests_require=['gym', 'matplotlib'] + base_requirements
 )
 
