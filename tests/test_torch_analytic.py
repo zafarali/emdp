@@ -10,7 +10,7 @@ except ImportError:
     # Torch test will not be applied.
     torch_imported = False
 
-@pytest.mark.skipif(not torch_imported, 'Torch not imported')
+@pytest.mark.skipif(not torch_imported, reason='Torch not imported')
 def test_V_pi():
     """Check if computation works."""
     mdp = build_SB_example35()
@@ -27,7 +27,7 @@ def test_V_pi():
                                        -1.0, -0.4, -0.4, -0.6, -1.2,
                                        -1.9, -1.3, -1.2, -1.4, -2.0]))
 
-@pytest.mark.skipif(not torch_imported, 'Torch not imported')
+@pytest.mark.skipif(not torch_imported, reason='Torch not imported')
 def test_differentiable():
     mdp = build_SB_example35()
 
