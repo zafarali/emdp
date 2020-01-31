@@ -30,7 +30,6 @@ class GridWorldMDP(MDP):
         self.human_state = (None, None)
         self.has_absorbing_state = len(terminal_states) > 0
         super().__init__(P, R, gamma, p0, terminal_states, seed=seed, skip_check=skip_check)
-        # self.reset()
 
     #def reset(self):
     #    super().reset()
