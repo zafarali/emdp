@@ -5,7 +5,7 @@ import numpy as np
 
 
 def calculate_P_pi(P, pi):
-    """
+    r"""
     calculates P_pi
     P_pi(s,t) = \sum_a pi(s,a) p(s, a, t)
     :param P: transition matrix of size |S|x|A|x|S|
@@ -15,7 +15,7 @@ def calculate_P_pi(P, pi):
     return np.einsum('sat,sa->st', P, pi)
 
 def calculate_R_pi(R, pi):
-    """
+    r"""
     calculates R_pi
     R_pi(s) = \sum_a pi(s,a) r(s,a)
     :param R: reward matrix of size |S| x |A|
@@ -39,7 +39,7 @@ def calculate_V_pi_from_successor_representation(Phi, R_pi):
     return np.einsum('st,t->s', Phi, R_pi)
 
 def calculate_V_pi(P, R, pi, gamma):
-    """
+    r"""
     Calculates V_pi from the successor representation using the analytic form:
     (I- gamma*P_pi)^{-1} * R_pi
     where P_pi(s,t) = \sum_a pi(s,a) p(s, a, t)
