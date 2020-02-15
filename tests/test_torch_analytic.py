@@ -4,7 +4,7 @@ import numpy as np
 
 try:
     import torch
-    from emdp.torch_analytic import calculate_V_pi
+    from emdp.analytic.torch import calculate_V_pi
     torch_imported = True
 except ImportError:
     # Torch test will not be applied.
