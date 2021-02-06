@@ -2,18 +2,17 @@
 Utilities to help build more complex grid worlds.
 """
 import numpy as np
-from .helper_utilities import (build_simple_grid,
-                               get_possible_actions,
-                               check_can_take_action,
-                               get_state_after_executing_action,
-                               flatten_state,
-                               unflatten_state)
+
 from . import GridWorldMDP
+from .helper_utilities import (build_simple_grid,
+                               flatten_state)
+
 
 class TransitionMatrixBuilder(object):
     """
     Builder object to build a transition matrix for a grid world
     """
+
     def __init__(self, grid_size, action_space=4, has_terminal_state=True):
         self.has_terminal_state = has_terminal_state
         self.grid_size = grid_size
@@ -44,7 +43,6 @@ class TransitionMatrixBuilder(object):
         self.grid_added = True
         self.P_modified = True
 
-
     def add_wall_at(self, tuple_location):
         """
         Add a blockade at this position
@@ -60,10 +58,10 @@ class TransitionMatrixBuilder(object):
         # get the transition probability distributions that go from s--> t via some action
         transition_probs_from = self._P[from_states, from_actions, :]
         # TODO: optimize this loop
-        for i, from_state in enumerate(from_states): # enumerate over states
-            tmp = transition_probs_from[i, target_state] # get the prob of transitioning
-            transition_probs_from[i, target_state] = 0 # set it to zero
-            transition_probs_from[i, from_state] += tmp # add the transition prob to staying in the same place
+        for i, from_state in enumerate(from_states):  # enumerate over states
+            tmp = transition_probs_from[i, target_state]  # get the prob of transitioning
+            transition_probs_from[i, target_state] = 0  # set it to zero
+            transition_probs_from[i, from_state] += tmp  # add the transition prob to staying in the same place
 
         self._P[from_states, from_actions, :] = transition_probs_from
 
@@ -80,7 +78,7 @@ class TransitionMatrixBuilder(object):
         # renormalize and update transition matrix.
         normalization = self._P.sum(2)
         # normalization[normalization == 0] = 1
-        normalization = 1/normalization
+        normalization = 1 / normalization
         self._P = (self._P * np.repeat(normalization, self._P.shape[0]).reshape(*self._P.shape))
 
         assert np.allclose(self._P.sum(2), 1), 'Normalization did not occur correctly: {}'.format(self._P.sum(2))
@@ -99,7 +97,6 @@ class TransitionMatrixBuilder(object):
         else:
             return self._P.copy()
 
-
     def add_wall_between(self, start, end):
         """
         Adds a wall between the starting and ending location
@@ -107,7 +104,7 @@ class TransitionMatrixBuilder(object):
         :param end: tuple (x,y) representing the ending position of the wall
         :return:
         """
-        if not(start[0] == end[0] or start[1] == end[1]):
+        if not (start[0] == end[0] or start[1] == end[1]):
             raise ValueError('Walls can only be drawn in straight lines. '
                              'Therefore, at least one of the x or y between '
                              'the states should match.')
@@ -126,7 +123,7 @@ class TransitionMatrixBuilder(object):
             # to ensure we can still draw walls
             start_idx, end_idx = end_idx, start_idx
 
-        for i in range(start_idx, end_idx+1):
+        for i in range(start_idx, end_idx + 1):
             my_location = [None, None]
             my_location[direction] = i
             my_location[int(not direction)] = constant_idx
@@ -150,9 +147,12 @@ def create_reward_matrix(state_space, size, reward_spec, action_space=4):
 
     return R
 
+
 """
 Simple builders for gridworlds
 """
+
+
 def build_simple_grid_world_with_terminal_states(reward_spec,
                                                  size,
                                                  p_success=1,
@@ -203,4 +203,3 @@ def build_simple_grid_world_without_terminal_states(reward_spec,
     p0[start_state] = 1
 
     return GridWorldMDP(P, R, gamma, p0, terminal_states=[], size=size, seed=seed)
-
