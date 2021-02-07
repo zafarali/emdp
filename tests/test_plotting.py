@@ -16,7 +16,7 @@ def test_plotting_integration():
         trajectory = [mdp.reset()]
         for _ in range(10):  # 10 steps maximum
             state, reward, done, info = mdp.step(random.sample([actions.LEFT, actions.RIGHT,
-                                                                actions.DOWN, actions.UP], 1)[0])
+                                                                actions.UP, actions.DOWN], 1)[0])
             trajectory.append(state)
         trajectories.append(trajectory)
 
