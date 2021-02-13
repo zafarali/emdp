@@ -5,7 +5,8 @@ n_actions = 4
 
 def flatten_state(state, size, state_space):
     """Flatten state (x,y) into a one hot vector"""
-    idx = size * state[0] + state[1]
+    x, y = state
+    idx = size * y + x
     one_hot = np.zeros(state_space)
     one_hot[idx] = 1
     return one_hot
@@ -15,10 +16,12 @@ def unflatten_state(onehot, size, has_absorbing_state):
     """Unflatten a one hot vector into a (x,y) pair"""
     if has_absorbing_state:
         onehot = onehot[:-1]
-    onehot = onehot.reshape(size, size)
-    x = onehot.argmax(0).max()
-    y = onehot.argmax(1).max()
-    return (x, y)
+    (s,), = np.argwhere(onehot)
+    return state_to_xy(s, size)
+
+def state_to_xy(s, size):
+    y, x = divmod(s, size)
+    return x, y
 
 
 def get_state_after_executing_action(action, state, grid_size):
