@@ -44,7 +44,10 @@ Builds a simple 5x5 grid world where there is a terminal state at (0, 4). The pr
 For a full example, see how to build this example from the S&B book:
 
 ```python
+import numpy as np
 import emdp.gridworld as gw
+from emdp import actions
+from emdp.gridworld.helper_utilities import check_can_take_action
 
 def build_SB_example35():
     """
@@ -70,6 +73,11 @@ def build_SB_example35():
     P[3, :, 13] = 1  # now set the probability of going from 3 to 13 with prob 1 for all actions
 
     R = np.zeros((P.shape[0], P.shape[1])) # initialize a matrix of size |S|x|A|
+    for state in range(P.shape[0]):
+        for action in [actions.UP, actions.LEFT, actions.RIGHT, actions.DOWN]:
+            if not check_can_take_action(action, state, size):
+                R[state, action] = -1
+    
     R[1, :] = +10
     R[3, :] = +1
 
@@ -78,6 +86,7 @@ def build_SB_example35():
 
     terminal_states = []
     return gw.GridWorldMDP(P, R, gamma, p0, terminal_states, size)
+
 ```
 
 To actually use this there is a gym like interface where you can move around:
@@ -87,6 +96,7 @@ To actually use this there is a gym like interface where you can move around:
 mdp = build_SB_example35()
 state, reward, done, _ = mdp.step(actions.UP) # moves the agent up.
 ```
+For another example with terminal states, check the `examples/simple.py` file for example 4.1 from the SB book.
 
 #### Plotting GridWorlds
 
