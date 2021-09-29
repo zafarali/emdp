@@ -1,6 +1,7 @@
 import numpy as np
 from emdp import actions
 from emdp.gridworld.helper_utilities import build_simple_grid, check_can_take_action
+from emdp.gridworld.builder_tools import create_reward_matrix
 from emdp.gridworld.txt_utilities import get_char_matrix, build_gridworld_from_char_matrix
 from emdp.gridworld.env import GridWorldMDP
 from emdp.common import MDP
@@ -28,9 +29,7 @@ def build_SB_example35():
     P[3, :, :] = 0  # first set the probability of all actions from state 3 to zero
     P[3, :, 13] = 1  # now set the probability of going from 3 to 13 with prob 1 for all actions
 
-    # TODO: add rewards for walking off the grid
-
-
+    # add rewards for walking off the grid
     R = np.zeros((P.shape[0], P.shape[1])) # initialize a matrix of size |S|x|A|
 
     for state in range(P.shape[0]):
@@ -48,11 +47,46 @@ def build_SB_example35():
     return GridWorldMDP(P, R, gamma, p0, terminal_states, size)
 
 
-def build_SB_example41():
+def build_SB_example41(size=4):
     """
-    Example 4.1 from (Sutton and Barto, 2018)  pg (Jan 2018 version).
+    There are four actions possible in each state, A = {up, down, right, left}, which deterministically cause the
+    corresponding state transitions, except that actions that would take the agent off the grid in fact leave the
+    state unchanged.
+    This is an undiscounted, episodic task.
+    The reward is -1 on all transitions until the terminal state is reached.
+    The terminal state is shaded in the figure (although it is shown in two places, it is formally one state).
+
+    note on reward_spec/terminal_states:
+    ------------------------------------
+    On entering any of these states, the mdp inadvertently makes a last transition to the absorbing state and stays
+    there forever (Ref: SB Section 3.4).
+    In this example, all transitions get -1 as reward, except those last ones from terminal states, which have
+    0 reward. Also in absorbing state, all actions receive 0 reward by definition of an episodic task.
     """
-    pass
+    size = size
+    gamma = 1  # undiscounted episodic task
+    p_success = 1  # actions always successful
+
+    reward_spec = {(0, 0): 1, (size - 1, size - 1): 1}
+
+    P = build_simple_grid(size=size, terminal_states=reward_spec.keys(), p_success=p_success)
+    R = create_reward_matrix(P.shape[0], size, reward_spec, action_space=4)
+    # print(f"R.shape={R.shape}")
+    R += -1  # makes rewards for all transitions -1, except from terminal states
+    R[P.shape[0] - 1, :] = 0  # also set the constructed dummy absorbing state's reward to 0
+    # print(R)
+
+    num_terminal_states = len(reward_spec.keys()) + 1
+
+    p0 = np.ones(P.shape[0])  # assumption: terminal/absorbing states can't be the starting state!
+    for t in reward_spec:
+        # print(f"t={t}")
+        p0[size * t[0] + t[1]] = 0
+
+    p0[size * size] = 0  # start prob. of dummy absorbing state is also zero
+    p0 = p0 / (P.shape[0] - num_terminal_states)
+
+    return GridWorldMDP(P, R, gamma, p0, terminal_states=reward_spec.keys(), size=size)
 
 
 def build_twostate_MDP():
