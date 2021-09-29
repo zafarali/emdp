@@ -96,6 +96,7 @@ To actually use this there is a gym like interface where you can move around:
 mdp = build_SB_example35()
 state, reward, done, _ = mdp.step(actions.UP) # moves the agent up.
 ```
+For another example with terminal states, check the `examples/simple.py` file for example 4.1 from the SB book.
 
 #### Plotting GridWorlds
 
