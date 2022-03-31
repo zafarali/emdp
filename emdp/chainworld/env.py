@@ -15,23 +15,25 @@ def build_chain_MDP(n_states=3,
     """
     A simple chain world with states and 2 actions.
     Actions can fail with probability 1-p_success
-    (!) note that you probably want your terminal state to be separate from
+    
+    .. note::
+        
+        you probably want your terminal state to be separate from
         the state where the reward is obtained.
 
     Example of how to use:
-    ```python
 
-    # a 7 state MDP where the agent starts in the middle
-    # at the two ends are absorbing states (given by terminal states)
-    # if the agent reaches the state before the terminal state it gets a reward
-    # if the agent is at the left of the world and it takes an action LEFT it gets a -1
-    # otherwise it gets nothing
-    # if the agent is at the right of the world and it takes an action RIGHT it gets a +1
-    # otherwise it gets nothing
-    build_chain_MDP(n_states=7, p_success=0.9, reward_spec=[(5, RIGHT, +1), (1, LEFT, -1)]
-                    starting_distribution=np.array([0,0,0,1,0,0,0]),
-                    terminal_states=[0, 6], gamma=0.9)
-    ```
+        # a 7 state MDP where the agent starts in the middle
+        # at the two ends are absorbing states (given by terminal states)
+        # if the agent reaches the state before the terminal state it gets a reward
+        # if the agent is at the left of the world and it takes an action LEFT it gets a -1
+        # otherwise it gets nothing
+        # if the agent is at the right of the world and it takes an action RIGHT it gets a +1
+        # otherwise it gets nothing
+        build_chain_MDP(n_states=7, p_success=0.9, reward_spec=[(5, RIGHT, +1), (1, LEFT, -1)]
+                        starting_distribution=np.array([0,0,0,1,0,0,0]),
+                        terminal_states=[0, 6], gamma=0.9)
+
     :param n_states: the number of states in the chain world.
     :param p_success: the probability of successfully executing an action.
     :param reward_spec: a list of tuples which represent

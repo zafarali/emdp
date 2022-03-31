@@ -7,26 +7,37 @@ from ..common import MDP
 from ..exceptions import EpisodeDoneError, InvalidActionError
 from ..actions import LEFT, RIGHT, UP, DOWN
 from .helper_utilities import flatten_state, unflatten_state
+from typing import List, Tuple
+
 
 class GridWorldMDP(MDP):
-    def __init__(self, P, R, gamma, p0, terminal_states, size, seed=1337, skip_check=False,
-                 convert_terminal_states_to_ints=False):
-        """
-        (!) if terminal_states is not empty then there will be an absorbing state. So
-            the actual number of states will be size x size + 1
-            if there is a terminal state, it should be the last one.
-        :param P: Transition matrix |S| x |A| x |S|
-        :param R: Transition matrix |S| x |A|
-        :param gamma: discount factor
-        :param p0: initial starting distribution
-        :param terminal_states: Must be a list of (x,y) tuples.  use skip_terminal_state_conversion if giving ints
-        :param size: the size of the grid world (i.e there are size x size (+ 1)= |S| states)
-        :param seed:
-        :param skip_check:
-        """
+    """
+    .. note:: 
+        if ``terminal_states`` is not empty then there will be an absorbing state. So
+        the actual number of states will be :math:`size^2 + 1`
+        if there is a terminal state, it should be the last one.
+
+    Args:
+        P (np.ndarray): state transition matrix :math:`P: \mathcal{S}\\times\mathcal{A}\\times\mathcal{S}\mapsto\mathbb{R}`, 
+            the shape is :math:`|S| \\times |A| \\times |S|`.
+        R (np.ndarray): reward matrix :math:`r: \mathcal{S}\\times \mathcal{A}\mapsto \mathbb{R}`, 
+            the shape is:math:`|S| \\times |A|`.
+        gamma (float): discount factor :math:`\gamma`
+        p0 (np.ndarray): initial starting distribution :math:`p_0`. The array shape is :math:`|\mathcal{S}|=size\\times size`.
+        terminal_states (List[Tuple[int,int]]): Must be a list of (x,y) tuples.  
+            use skip_terminal_state_conversion if giving ints
+        size (int): the size of the grid world (i.e there are :math:`size \\times size + 1 = |\mathcal{S}|` states in total).
+        seed (int, optional): the random seed for simulations. Defaults to 1337.
+        skip_check (bool, optional): _description_. Defaults to False.
+        convert_terminal_states_to_ints (bool, optional): _description_. Defaults to False.
+    """
+
+    def __init__(self, P, R, gamma, p0, terminal_states: List[Tuple[int, int]], size:int, 
+                seed=1337, skip_check=False,
+                convert_terminal_states_to_ints=False):
         if not convert_terminal_states_to_ints:
             terminal_states = list(map(lambda tupl: int(size * tupl[0] + tupl[1]), terminal_states))
-        self.size =  size
+        self.size = size
         self.human_state = (None, None)
         self.has_absorbing_state = len(terminal_states) > 0
         super().__init__(P, R, gamma, p0, terminal_states, seed=seed, skip_check=skip_check)

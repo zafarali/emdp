@@ -1,13 +1,14 @@
 """
 Environments with Tricky Rewards
 Two kinds of worlds are available:
-    1. Symmetric Grid World
-        (0, size-1): +true_reward
-        (size-1, 0): epsilon * true_reward
-    2. Multi-minima Grid World
-        (2,0): best_reward
-        (1,1): best_reward*2/3
-        (0,2): best_reward*1/3
+
+1. Symmetric Grid World
+    (0, size-1): +true_reward
+    (size-1, 0): epsilon * true_reward
+2. Multi-minima Grid World
+    (2,0): best_reward
+    (1,1): best_reward*2/3
+    (0,2): best_reward*1/3
 """
 import numpy as np
 from emdp.gridworld.builder_tools import build_simple_grid_world_with_terminal_states
@@ -93,6 +94,7 @@ def make_four_minima_env(epsilon, best_reward=5, size=GRID_SIZE,
         
     and the agent starts in the middle of the grid at (size/2, size/2).
     Note that size must have an odd shape.
+    
     :param best_reward: 
     :param size: 
     :param p_success: 

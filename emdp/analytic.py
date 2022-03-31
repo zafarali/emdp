@@ -5,21 +5,29 @@ import numpy as np
 
 
 def calculate_P_pi(P, pi):
-    r"""
-    calculates P_pi
-    P_pi(s,t) = \sum_a pi(s,a) p(s, a, t)
-    :param P: transition matrix of size |S|x|A|x|S|
-    :param pi: matrix of size |S| x |A| indicating the policy
-    :return: a matrix of size |S| x |S|
+    """
+    calculates :math:`P_\pi`:
+
+    .. math::
+
+        P_\pi(s,t) = \sum_a \pi(s,a) p(s, a, t)
+
+    :param P: transition matrix of size :math:`|\mathcal{S}|\\times|\mathcal{A}|\\times|\mathcal{S}|`
+    :param pi: matrix of size :math:`|\mathcal{S}|\\times|\mathcal{A}|` indicating the policy
+    :return: a matrix of size :math:`|\mathcal{S}|\\times|\mathcal{S}|`
     """
     return np.einsum('sat,sa->st', P, pi)
 
 def calculate_R_pi(R, pi):
     r"""
     calculates R_pi
-    R_pi(s) = \sum_a pi(s,a) r(s,a)
-    :param R: reward matrix of size |S| x |A|
-    :param pi: matrix of size |S| x |A| indicating the policy
+    
+    .. math::
+
+        R_\pi(s) = \sum_a \pi(s,a) r(s,a)
+
+    :param R: reward matrix of size :math:`|\mathcal{S}|\\times|\mathcal{A}|`
+    :param pi: matrix of size :math:`|\mathcal{S}|\\times|\mathcal{A}|` indicating the policy
     :return:
     """
     return np.einsum('sa,sa->s', R, pi)
@@ -27,7 +35,11 @@ def calculate_R_pi(R, pi):
 def calculate_successor_representation(P_pi, gamma):
     """
     Calculates the successor representation
-    (I- gamma*P_pi)^{-1}
+    
+    .. math::
+    
+        (I- \gamma*P_\pi)^{-1}
+
     :param P_pi:
     :param gamma:
     :return:
