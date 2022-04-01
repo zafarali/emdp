@@ -1,32 +1,81 @@
 import numpy as np
 from ..actions import LEFT, RIGHT, UP, DOWN
 from ..exceptions import InvalidActionError
-from typing import List
+from typing import List, Tuple
 n_actions = 4
 
 
+def is_P_valid_stochastic(P: np.ndarray) -> bool:
+    """return ``True`` is transition model ``P`` is a valid stochastic transition model.
+    :math:`P` is a valid stochastic transition model if 
+
+    .. math::
+
+        \sum_{s'\in\mathcal{S}} Pr(s'|s,a) = 1
+
+    Args:
+        P (np.ndarray): transition model.
+
+    Returns:
+        bool:
+    """
+    return np.allclose(P.sum(axis=2), 1)
+
+
 def flatten_state(state, size, state_space):
-    """Flatten state (x,y) into a one hot vector."""
+    """Flatten state as (row, col) pair into a one-hot vector.
+
+    Example:
+
+        >>> flatten_state((1,2), 3, 9)
+        array([0, 0, 0, 0, 0, 1, 0, 0, 0], dtype=int32)
+
+    Args:
+        state (Tuple[int, int]): (row, col) pair
+        size (int): width (number of columns) of the grid world.
+        state_space (int): size of the state space, i.e. :math:`|\mathcal{S}|`.
+
+    Returns:
+        np.ndarray: one-hot representation of the state.
+    """
     idx = size * state[0] + state[1]
-    one_hot = np.zeros(state_space)
+    one_hot = np.zeros(state_space, dtype=np.int32)
     one_hot[idx] = 1
     return one_hot
 
 
-def unflatten_state(onehot, size, has_absorbing_state):
-    """Unflatten a one hot vector into a (x,y) pair"""
+def unflatten_state(onehot: np.ndarray, size,
+                    has_absorbing_state: bool) -> Tuple[int, int]:
+    """Unflatten a one-hot vector into a (row, col) pair.
+
+    Examples:
+
+        >>> unflatten_state(np.array([0,0,0,1]), 2, False)
+        (1, 1)
+
+        >>> unflatten_state(np.array([0, 0, 0, 0, 0, 1, 0, 0, 0]), 3, False)
+        (1, 2)
+
+    Args:
+        onehot (np.ndarray): one hot representation of a state
+        size (int): size of the grid world
+        has_absorbing_state (bool): whether the grid world has an absorbing state
+
+    Returns:
+        Tuple[int,int]: (row, col) pair
+    """
     if has_absorbing_state:
         onehot = onehot[:-1]
     onehot = onehot.reshape(size, size)
-    x = onehot.argmax(0).max()
-    y = onehot.argmax(1).max()
+    x = onehot.argmax(axis=0).max()
+    y = onehot.argmax(axis=1).max()
     return (x, y)
 
 
 def get_state_after_executing_action(action, state, grid_size):
     """
     Gets the state after executing an action
-    
+
     :param action:
     :param state:
     :param grid_size:
@@ -141,7 +190,9 @@ def build_simple_grid(size=5, terminal_states: List = None, p_success=1):
         InvalidActionError
 
     Returns:
-        np.ndarray: the transition matrix of the given grid world. shape: :math:`\left(|S|+1,|A|,|S|+1\\right)`
+        np.ndarray: the transition matrix of the given grid world. 
+        The shape is :math:`\left(|S|+1,|A|,|S|+1\\right)`, 
+        or  :math:`\left(|S|,|A|,|S|\\right)` if there is no terminal state.
     """
     if terminal_states is None:
         terminal_states = []

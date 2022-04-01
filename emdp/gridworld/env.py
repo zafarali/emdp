@@ -32,9 +32,10 @@ class GridWorldMDP(MDP):
         convert_terminal_states_to_ints (bool, optional): _description_. Defaults to False.
     """
 
-    def __init__(self, P, R, gamma, p0, terminal_states: List[Tuple[int, int]], size:int, 
-                seed=1337, skip_check=False,
-                convert_terminal_states_to_ints=False):
+    def __init__(self, P, R, gamma, p0,
+                 terminal_states: List[Tuple[int, int]], size: int,
+                 seed=1337, skip_check=False,
+                 convert_terminal_states_to_ints=False):
         if not convert_terminal_states_to_ints:
             terminal_states = list(map(lambda tupl: int(size * tupl[0] + tupl[1]), terminal_states))
         self.size = size
@@ -48,11 +49,31 @@ class GridWorldMDP(MDP):
         return self.current_state
 
     def flatten_state(self, state):
-        """Flatten state (x,y) into a one hot vector"""
+        """
+        Flatten state (row, col) into a one-hot vector.
+
+        see also: :func:`emdp.gridworld.helper_utilities.flatten_state`
+
+        Args:
+            state (Tuple[int,int]): (row, col) pair
+
+        Returns:
+            np.ndarray: one-hot vector of shape (size * size)
+
+        """
         return flatten_state(state, self.size, self.state_space)
 
-    def unflatten_state(self, onehot):
-        """Unflatten a one hot vector into a (x,y) pair"""
+    def unflatten_state(self, onehot) -> Tuple[int, int]:
+        """Unflatten a one-hot state vector into a (row, col) pair
+
+        see also: :func:`emdp.gridworld.helper_utilities.unflatten_state`
+
+        Args:
+            onehot (np.ndarray): one-hot vector of shape (size, size)
+
+        Returns:
+            Tuple[int,int]: (row, col) pair
+        """
         return unflatten_state(onehot, self.size, self.has_absorbing_state)
 
     def step(self, action):

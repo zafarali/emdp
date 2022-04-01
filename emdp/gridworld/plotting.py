@@ -34,6 +34,7 @@ class GridWorldPlotter(object):
     def plot_grid(self, ax):
         """
         Plots the skeleton of the grid world
+
         :param ax:
         :return:
         """
@@ -51,6 +52,7 @@ class GridWorldPlotter(object):
     def plot_trajectories(self, ax, trajectories, dont_unflatten=False, jitter_scale=1):
         """
         Plots a individual trajectory paths with some jitter.
+
         :param ax: The axes to plot this on
         :param trajectories: a list of trajectories. Each trajectory is a list of states (numpy arrays)
                              These states should be obtained by using the mdp.step() operation. To prevent
@@ -119,6 +121,7 @@ class GridWorldPlotter(object):
     def plot_heatmap(self, ax, trajectories, dont_unflatten=False, wall_locs=None):
         """
         Plots a state-visitation heatmap with walls.
+
         :param ax: The axes to plot this on.
         :param trajectories: a list of trajectories. Each trajectory is a list of states (numpy arrays)
                              These states should be obtained by using the mdp.step() operation. To prevent
@@ -160,6 +163,7 @@ class GridWorldPlotter(object):
     def unflat_trajectories(self, trajectories):
         """
         Returns a generator where the trajectories have been unflattened.
+        
         :param trajectories:
         :return:
         """

@@ -27,6 +27,7 @@ emdp.gridworld.helper\_utilities module
    :members:
    :undoc-members:
    :show-inheritance:
+   :member-order: bysource
 
 emdp.gridworld.plotting module
 ------------------------------

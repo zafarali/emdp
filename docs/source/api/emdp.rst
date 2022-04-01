@@ -1,4 +1,4 @@
-emdp
+API
 ============
 
 Subpackages
@@ -8,9 +8,9 @@ Subpackages
    :maxdepth: 4
 
    emdp.chainworld
+   emdp.gridworld
    emdp.emdp_gym
    emdp.examples
-   emdp.gridworld
 
 Submodules
 ----------
