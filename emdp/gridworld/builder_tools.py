@@ -2,7 +2,7 @@
 Utilities to help build more complex grid worlds.
 """
 import numpy as np
-
+from typing import List, Tuple, Dict
 from . import GridWorldMDP
 from .helper_utilities import (build_simple_grid,
                                flatten_state)
@@ -22,13 +22,21 @@ class TransitionMatrixBuilder(object):
         self.grid_added = False
         self.P_modified = False
 
-    def add_grid(self, terminal_states=[], p_success=1):
+    def add_grid(self, terminal_states: List[int] = None, p_success: float = 1):
+        """Adds a grid so that you cant walk off the edges of the grid
+
+
+        Args:
+            terminal_states (List[int], optional): Terminal states. 
+                Defaults to ``[]``.
+            p_success (float, optional): Defaults to 1.
+
+        Raises:
+            ValueError
         """
-        Adds a grid so that you cant walk off the edges of the grid
-        :param terminal_states:
-        :param p_success:
-        :return:
-        """
+        if terminal_states is None:
+            terminal_states = []
+
         if self.has_terminal_state and len(terminal_states) == 0:
             raise ValueError('has_terminal_states is true, but no terminal states supplied.')
 
@@ -87,23 +95,31 @@ class TransitionMatrixBuilder(object):
 
     @property
     def P(self, nocopy=False):
-        """
-        Returns a new array with the transition matrix built so far.
-        :param nocopy:
-        :return:
+        """Returns a new array with the transition matrix built so far.
+
+        Args:
+            nocopy (bool, optional): Defaults to False.
+
+        Returns:
+            np.array: the transition model matrix
         """
         if nocopy:
             return self._P
         else:
             return self._P.copy()
 
-    def add_wall_between(self, start, end):
+    def add_wall_between(self, start: Tuple[int, int], end: Tuple[int, int]):
         """
         Adds a wall between the starting and ending location
-        :param start: tuple (x,y) representing the starting position of the wall
-        :param end: tuple (x,y) representing the ending position of the wall
-        :return:
+
+        Args:
+            start (Tuple[int,int]): tuple (x,y) representing the starting position of the wall
+            end (Tuple[int,int]): tuple (x,y) representing the ending position of the wall
+
+        Raises:
+            ValueError
         """
+
         if not (start[0] == end[0] or start[1] == end[1]):
             raise ValueError('Walls can only be drawn in straight lines. '
                              'Therefore, at least one of the x or y between '
@@ -131,15 +147,20 @@ class TransitionMatrixBuilder(object):
             self.add_wall_at(tuple(my_location))
 
 
-def create_reward_matrix(state_space, size, reward_spec, action_space=4):
+def create_reward_matrix(state_space, size, reward_spec: Dict[Tuple[int, int], float], action_space=4):
     """
     Abstraction to create reward matrices.
-    :param state_space: Size of the state space
-    :param size: Size of the gird world (width)
-    :param reward_spec: The reward specification
-    :param action_space: The size of the action space
-    :return:
+
+    Args:
+        state_space(int): Size of the state space, :math:`|\mathcal{S}|`.
+        size(int): size of the gird world (width or height).
+        reward_spec(Dict[Tuple[int,int], float]): the reward specification.
+        action_space(int): the size of the action space
+
+    Returns:
+        np.ndarray: the reward matrix.
     """
+
     R = np.zeros((state_space, action_space))
     for (reward_location, reward_value) in reward_spec.items():
         reward_location = flatten_state(reward_location, size, state_space).argmax()
@@ -163,6 +184,7 @@ def build_simple_grid_world_with_terminal_states(reward_spec,
     A simple size x size grid world where agents actions has a prob of p_success of executing correctly.
     rewards are given by a dict where the indices and the x,y positions and the value is the magnitude of the reward.
     Upon reaching a state with a reward, every action gives a reward. The episode then goes to an absorbing state and terminates.
+
     :param reward_spec: Reward specification
     :param size: Size of the gridworld (grid world will be size x size)
     :param p_success: The probability the action is successful.
@@ -189,6 +211,7 @@ def build_simple_grid_world_without_terminal_states(reward_spec,
     A simple size x size grid world where agents actions has a prob of p_success of executing correctly.
     rewards are given by a dict where the indices and the x,y positions and the value is the magnitude of the reward.
     Upon reaching a state with a reward, every action gives a reward. The episode does not terminate.
+    
     :param reward_spec: Reward specification
     :param size: Size of the gridworld (grid world will be size x size)
     :param p_success: The probability the action is successful.

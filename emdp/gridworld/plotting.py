@@ -2,13 +2,16 @@ from .helper_utilities import unflatten_state
 from .env import GridWorldMDP
 import numpy as np
 
+
 class GridWorldPlotter(object):
+    """
+    Utility to plot gridworlds
+
+    Args:
+        grid_size(int): size of the gridworld
+        has_absorbing_state(bool, optional): boolean representing if the gridworld has an absorbing state
+    """
     def __init__(self, grid_size, has_absorbing_state=True):
-        """
-        Utility to plot gridworlds
-        :param grid_size: size of the gridworld
-        :param has_absorbing_state: boolean representing if the gridworld has an absorbing state
-        """
         if isinstance(grid_size, (GridWorldMDP,)):
             raise TypeError('grid_size cannot be a GridWorldMDP. '
                             'To instantiate from GridWorldMDP use GridWorldPlotter.from_mdp()')
@@ -22,15 +25,16 @@ class GridWorldPlotter(object):
         return unflatten_state(onehot_state, self.size, self.has_absorbing_state)
 
     @staticmethod
-    def from_mdp(mdp):
+    def from_mdp(mdp: GridWorldMDP):
         # TODO: obtain reward specifications
-        if not isinstance(mdp, (GridWorldMDP,)):
+        if not isinstance(mdp, GridWorldMDP):
             raise TypeError('Only GridWorldMDPs can be used with GridWorldPlotters')
         return GridWorldPlotter(mdp.size, mdp.has_absorbing_state)
 
     def plot_grid(self, ax):
         """
         Plots the skeleton of the grid world
+
         :param ax:
         :return:
         """
@@ -48,6 +52,7 @@ class GridWorldPlotter(object):
     def plot_trajectories(self, ax, trajectories, dont_unflatten=False, jitter_scale=1):
         """
         Plots a individual trajectory paths with some jitter.
+
         :param ax: The axes to plot this on
         :param trajectories: a list of trajectories. Each trajectory is a list of states (numpy arrays)
                              These states should be obtained by using the mdp.step() operation. To prevent
@@ -64,7 +69,7 @@ class GridWorldPlotter(object):
 
         for trajectory_unflattened in trajectories_unflat:
             x, y = list(zip(*trajectory_unflattened))
-            x = np.array(x)  + jitter_scale * np.random.rand(len(x)) / (2 * self.size)
+            x = np.array(x) + jitter_scale * np.random.rand(len(x)) / (2 * self.size)
             y = np.array(y) + jitter_scale * np.random.rand(len(x)) / (2 * self.size)
             ax.plot(x, y)
 
@@ -72,14 +77,19 @@ class GridWorldPlotter(object):
 
     def plot_environment(self, ax, wall_locs=None, plot_grid=False):
         """
-        Plots the environment  with walls.
-        :param ax: The axes to plot this on
-        :param wall_locs: Locations of the walls for plotting them in a different color..
-        :return:
-        """
+        Plots the environment with walls.
 
-        # plot states with background color white
-        state_background = np.ones((self.size, self.size))
+        Args:
+            ax: The axes to plot this on
+            wall_locs(List[Tuple[int,int]]): Locations of the walls for plotting them in a different color.
+                The locations is a list of (row, col) tuples.
+            plot_grid(bool): Boolean to plot the grid.
+        
+        Returns:
+            Tuple:
+                ax: The axes of the final plot.\n
+                imshow_ax: The final plot.
+        """
 
         # plot walls in lame way -- set them to some hand-engineered color
         wall_img = np.zeros((self.size, self.size, 4))
@@ -93,7 +103,6 @@ class GridWorldPlotter(object):
                 wall_img[y_coord, x_coord, 3] = 1.0  # alpha
 
         # render heatmap and overlay the walls image
-        imshow_ax = ax.imshow(state_background, interpolation=None)
         imshow_ax = ax.imshow(wall_img, interpolation=None)
         ax.grid(False)
 
@@ -112,6 +121,7 @@ class GridWorldPlotter(object):
     def plot_heatmap(self, ax, trajectories, dont_unflatten=False, wall_locs=None):
         """
         Plots a state-visitation heatmap with walls.
+
         :param ax: The axes to plot this on.
         :param trajectories: a list of trajectories. Each trajectory is a list of states (numpy arrays)
                              These states should be obtained by using the mdp.step() operation. To prevent
@@ -130,7 +140,7 @@ class GridWorldPlotter(object):
         # plot actual state visitation heatmap
         for trajectory in trajectories_unflat:
             for state in trajectory:
-                x_coord =state[0]
+                x_coord = state[0]
                 y_coord = state[1]
                 state_visitations[y_coord, x_coord] += 1.
         # plot walls in lame way -- set them to some hand-engineered color
@@ -153,8 +163,8 @@ class GridWorldPlotter(object):
     def unflat_trajectories(self, trajectories):
         """
         Returns a generator where the trajectories have been unflattened.
+        
         :param trajectories:
         :return:
         """
         return map(lambda traj: list(map(self._unflatten, traj)), trajectories)
-
